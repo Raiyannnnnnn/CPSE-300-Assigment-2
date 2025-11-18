@@ -1,4 +1,5 @@
 Imports System
+Imports System.Collections.Generic
 Imports System.Windows.Forms
 
 Module Program
@@ -20,7 +21,9 @@ Module Program
         customers.Add(New Customer(2, 3))
         
         Dim simulation As New BankSimulation()
-        Console.WriteLine(simulation.RunSimulation(customers))
+        simulation.Initialize(customers)
+        simulation.Run()
+        Console.WriteLine(simulation.GetFormattedOutput())
         
         Console.WriteLine("Press any key to exit console mode...")
         Console.ReadKey()

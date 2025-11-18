@@ -1,11 +1,13 @@
 Imports System.IO
 Imports System.Drawing
+Imports System.Windows.Forms
 
 Public Class Form1
+    Inherits Form
+    
     Private simulation As BankSimulation
     Private customers As List(Of Customer)
     Private simulationResults As String
-    Private analysisResults As String
 
     Private WithEvents btnLoadFile As Button
     Private WithEvents btnRunSimulation As Button
@@ -16,7 +18,6 @@ Public Class Form1
     Private lblStatus As Label
 
     Public Sub New()
-        InitializeComponent()
         CreateControls()
         simulation = New BankSimulation()
         customers = New List(Of Customer)()
@@ -148,13 +149,11 @@ Public Class Form1
         End If
 
         Try
-            simulationResults = simulation.RunSimulation(customers)
-            analysisResults = simulation.GetAnalysis()
+            simulation.Initialize(customers)
+            simulation.Run()
+            simulationResults = simulation.GetFormattedOutput()
 
-            txtOutput.Text = "=== SIMULATION PROCESS ===" & Environment.NewLine &
-                           simulationResults & Environment.NewLine & Environment.NewLine &
-                           "=== ANALYSIS RESULTS ===" & Environment.NewLine &
-                           analysisResults
+            txtOutput.Text = simulationResults
 
             btnExport.Enabled = True
             lblStatus.Text = "Simulation completed successfully!"
@@ -195,7 +194,6 @@ Public Class Form1
         lstCustomers.Items.Clear()
         txtOutput.Clear()
         simulationResults = ""
-        analysisResults = ""
         btnRunSimulation.Enabled = False
         btnExport.Enabled = False
         lblStatus.Text = "Ready to load customer data"
